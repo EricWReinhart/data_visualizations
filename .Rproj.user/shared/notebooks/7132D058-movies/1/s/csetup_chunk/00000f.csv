@@ -1,0 +1,62 @@
+"0","knitr::opts_chunk$set(echo = FALSE)"
+"0","options(scipen=999) # remove scientific notation from numbers"
+"0",""
+"0","library(ggplot2)"
+"2","Keep up to date with changes at https://tidyverse.org/blog/
+"
+"0","library(plotly)"
+"2","Registered S3 method overwritten by 'data.table':
+  method           from
+  print.data.table     
+"
+"2","Registered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+"
+"2","
+Attaching package: ‘plotly’
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    filter
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    layout
+
+"
+"0","library(lubridate) # modify dates and time"
+"2","
+Attaching package: ‘lubridate’
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    date, intersect, setdiff, union
+
+"
+"0","library(scales) # formats numbers with commas"
+"0","library(dplyr) # functions like top_N"
+"2","
+Attaching package: ‘dplyr’
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","library(ggpol) # parliament visual"
+"0","library(treemap) # treemap"

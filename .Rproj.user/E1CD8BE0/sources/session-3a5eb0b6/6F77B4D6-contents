@@ -1,0 +1,133 @@
+---
+title: "Course Visualizations"
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+# Color palette
+cvi_colours = list(palette = c("#23ce74", "#37bcf5", "#ffae42", "#6b63fc", "#b02d38"))
+
+# Function to create color palette: https://www.jumpingrivers.com/blog/custom-colour-palettes-for-ggplot2/
+cvi_palettes = function(name, n, all_palettes = cvi_colours, type = c("discrete", "continuous")) {
+  palette = all_palettes[[name]]
+  if (missing(n)) {
+    n = length(palette)
+  }
+  type = match.arg(type)
+  out = switch(type,
+               continuous = grDevices::colorRampPalette(palette)(n),
+               discrete = palette[1:n]
+  )
+  structure(out, name = name, class = "palette")
+}
+```
+
+## Confidence Intervals Dashboard
+The dashboard is a review tool for introductory statistics students, focused on helping them understand, construct, and interpret confidence intervals. It features several examples and interactive elements that guide students through core concepts and provide engaging ways to explore the material.
+
+
+<iframe src="https://abby-flynt.shinyapps.io/ConfidenceLevels_Dashboard_Team3" class="l-screen-inset shaded" height="1000px"></iframe>
+
+
+
+
+## Generative Art
+
+<center> <h1> Twirl</h1> 
+```{r, out.width="50%"}
+knitr::include_graphics("Twirl.png")
+```
+</center>
+
+<center> <h1> Pinwheel </h1> 
+```{r, out.width="50%"}
+knitr::include_graphics("Pinwheel.png")
+```
+</center>
+
+<center> <h1> Crispy </h1> 
+```{r, out.width="50%"}
+knitr::include_graphics("Crispy.png")
+```
+</center>
+
+
+## Calories Consumed vs Plate Size Violin & Box Plot
+
+The plot compares total calories consumed across different plate sizes (small and large) based on a study exploring whether people eat more when served on larger plates. It uses violin and box plots to show the distribution and average consumption of calories for each group.
+
+```{r}
+library(ggplot2)
+load("plate.sizes.RData")
+plates$plate.size = factor(plates$plate.size, levels = c("0", "1"),
+				                  labels = c("Small Plate", "Large Plate"))
+#apply(plates, 2, function(x){sum(is.na(x))})
+attach(plates)
+
+
+ggplot(plates, aes(x = plate.size, y = kcal.consumed, fill = plate.size)) +
+  geom_violin(scale = "width", alpha= 0.5) +
+  guides(fill = "none") +
+  geom_boxplot(width = .25) + 
+  labs(x = "Plate Size", y = "Total Calories Consumed", 
+       title = "Calories Consumed vs Plate Size", fill = "Plate Size") + 
+  theme(plot.title = element_text(face = "bold", color = "#6b63fc")) + 
+  theme(axis.title.x = element_text(face = "bold", color = "#6b63fc")) + 
+  theme(axis.title.y = element_text(face = "bold", color = "#6b63fc")) +
+  scale_fill_manual(values = cvi_palettes("palette", 2)) 
+```
+
+
+## Correlation Matrix of Electricity Consumption Data
+
+This is a correlation matrix of data from US electricity producers in 1955. The variables are cost (total cost), output (total output), labor (wage rate), laborshare (cost share for labor), capital (capital price index), capitalshare (costshare for capital), fuel (fuel price), and fuelshare (cost share for fuel). Variables with a strong, positive correlation are more purple, and variables with a strong, negative correlation are more blue.
+
+```{r}
+library(ggplot2)
+library(ggcorrplot)
+
+electricity <- read.csv("Electricity1955.csv")[1:145, 2:9]
+attach(electricity)
+corr = cor(electricity)
+ggcorrplot(
+  corr, method = "circle",
+  hc.order = TRUE,
+  type = "upper",
+  outline.color = "black",
+  colors = cvi_palettes("palette", 5)) +
+  labs(title = "Correlation Matrix of Electricity Consumption Variables (1955)") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", color = "#6b63fc"))
+```
+
+
+## Scatter Plot of Median Family Income VS Cost of School
+
+The CollegeScores dataset contains information on US colleges and university, including variables like the name, median family income (\$), and average total cost to attend (\$). The scatterplot shows the relationship between median family income and the average total cost to attend, with Bucknell University highlighted in orange, while other schools are in blue.
+
+```{r}
+library(Lock5Data)
+data(CollegeScores)
+CollegeData = CollegeScores[complete.cases(CollegeScores), ]
+
+
+
+ggplot(CollegeData, aes(x = Cost, y = MedIncome,
+                      color = (Name != "Bucknell University"),
+                      size = (Name == "Bucknell University"))) + 
+  geom_point() + 
+  labs(title = "Median Family Income VS Cost of School", 
+       x = "Total Cost ($)", y = "Median Family Income ($)",  color = "School") +
+  scale_color_manual(labels = c("Bucknell University", "Other School") , 
+                     values = c("#ffae42", "#37bcf5")) +
+    scale_size_manual(values = c(1, 4)) +  
+  theme(plot.title = element_text(face = "bold", color = "#6b63fc")) + 
+  theme(axis.title.x = element_text(face = "bold", color = "#6b63fc")) + 
+  theme(axis.title.y = element_text(face = "bold", color = "#6b63fc")) +
+  guides(size = "none")
+```
+
+

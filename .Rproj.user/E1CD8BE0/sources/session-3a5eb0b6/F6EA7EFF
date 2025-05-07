@@ -1,0 +1,28 @@
+{
+    "id": "F6EA7EFF",
+    "path": "~/Desktop/data_project/data_visualizations/movies.Rmd",
+    "project_path": "movies.Rmd",
+    "type": "r_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1745863929984.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "191,48",
+        "scrollLine": "183",
+        "last_setup_crc32": "3a5eb0b67e71f690"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1746654627,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1746654627663,
+    "read_only": false,
+    "read_only_alternatives": []
+}

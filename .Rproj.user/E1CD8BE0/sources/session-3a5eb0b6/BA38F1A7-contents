@@ -1,0 +1,19 @@
+name: "data_visualizations"
+title: "Virtual Art Gallery"
+description: |
+  Virtual Art Gallery
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    # - text: "About"
+    #   href: about.html
+    - text: "Movie Box Office"
+      href: movies.html
+    - text: "Course Visualizations"
+      href: course.html
+output: distill::distill_article
+
+
+

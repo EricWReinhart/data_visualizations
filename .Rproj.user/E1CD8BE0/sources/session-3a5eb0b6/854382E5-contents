@@ -1,0 +1,24 @@
+---
+title: "Eric Reinhart"
+#image: "profile.png"
+color1: "#37bcf5"
+color2: "#23ce74"
+angle: 130
+links:
+  - label: LinkedIn
+    url: "https://www.linkedin.com/in/eric-w-reinhart/"
+  - label: GitHub
+    url: "https://github.com/EricWReinhart/"
+  - label: Email
+    url: "mailto:ewr005@bucknell.edu"
+output:
+  postcards::jolla
+site: distill::distill_website
+---
+ 
+Welcome to my virtual art gallery! Feel free to explore my Course Visualizations or my Movie Box Office Story!
+
+
+```{r, out.width="70%", echo=FALSE}
+knitr::include_graphics("movie_infographic.png")
+```

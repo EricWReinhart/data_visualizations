@@ -1,0 +1,42 @@
+"0","load(""plate.sizes.RData"")"
+"0","plates$plate.size = factor(plates$plate.size, levels = c(""0"", ""1""),"
+"0","				                  labels = c(""Small Plate"", ""Large Plate""))"
+"0","#apply(plates, 2, function(x){sum(is.na(x))})"
+"0","attach(plates)"
+"2","The following objects are masked from plates (pos = 3):
+
+    age, BIS.Q1, BIS.Q10, BIS.Q11, BIS.Q12, BIS.Q13, BIS.Q14, BIS.Q15,
+    BIS.Q16, BIS.Q17, BIS.Q18, BIS.Q19, BIS.Q2, BIS.Q20, BIS.Q21, BIS.Q22,
+    BIS.Q23, BIS.Q24, BIS.Q25, BIS.Q26, BIS.Q27, BIS.Q28, BIS.Q29, BIS.Q3,
+    BIS.Q30, BIS.Q4, BIS.Q5, BIS.Q6, BIS.Q7, BIS.Q8, BIS.Q9, BIS.TOTAL,
+    bite.rate, bite.size, BMI, Date, eat.rate, ethnicity, ethnicity.dicot,
+    fasting, fullness, g.consumed, g.remaining, g.served, gender,
+    highest.qual, highest.qual.split, hunger, ID, imd, imd.med.split, income,
+    income.med.split, kcal.consumed, like.food, line.task.correct,
+    meal.duration, n.bites, plate.size, servings, ssrt
+
+"
+"2","The following objects are masked from plates (pos = 9):
+
+    age, BIS.Q1, BIS.Q10, BIS.Q11, BIS.Q12, BIS.Q13, BIS.Q14, BIS.Q15,
+    BIS.Q16, BIS.Q17, BIS.Q18, BIS.Q19, BIS.Q2, BIS.Q20, BIS.Q21, BIS.Q22,
+    BIS.Q23, BIS.Q24, BIS.Q25, BIS.Q26, BIS.Q27, BIS.Q28, BIS.Q29, BIS.Q3,
+    BIS.Q30, BIS.Q4, BIS.Q5, BIS.Q6, BIS.Q7, BIS.Q8, BIS.Q9, BIS.TOTAL,
+    bite.rate, bite.size, BMI, Date, eat.rate, ethnicity, ethnicity.dicot,
+    fasting, fullness, g.consumed, g.remaining, g.served, gender,
+    highest.qual, highest.qual.split, hunger, ID, imd, imd.med.split, income,
+    income.med.split, kcal.consumed, like.food, line.task.correct,
+    meal.duration, n.bites, plate.size, servings, ssrt
+
+"
+"0","ggplot(plates, aes(x = plate.size, y = kcal.consumed, fill = plate.size)) +"
+"0","  geom_violin(scale = ""width"", alpha= 0.5) +"
+"0","  guides(fill = ""none"") +"
+"0","  geom_boxplot(width = .25) + "
+"0","  labs(x = ""Plate Size"", y = ""Total Calories Consumed"", "
+"0","       title = ""Calories Consumed vs Plate Size"", fill = ""Plate Size"") + "
+"0","  theme(plot.title = element_text(face = ""bold"", color = ""#6b63fc"")) + "
+"0","  theme(axis.title.x = element_text(face = ""bold"", color = ""#6b63fc"")) + "
+"0","  theme(axis.title.y = element_text(face = ""bold"", color = ""#6b63fc"")) +"
+"0","  scale_fill_manual(values = cvi_palettes(""palette"", 2)) "
+"0",""

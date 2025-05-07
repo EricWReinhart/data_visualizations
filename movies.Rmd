@@ -1,0 +1,243 @@
+---
+title: "The Mouse's Reign: Disney's Box Office Dominance"
+site: distill::distill_website
+---
+
+# Introduction
+Movies have long been a major part of entertainment throughout the world, shaping trends and influencing audiences, with their financial success often reflecting their cultural impact. We'll explore the top 1,000 highest-grossing Hollywood movies as of January 2020, sourced from IMDB and Rotten Tomatoes. Focusing on distributors with at least 90 movies in this list, we'll examine their box office performance and analyze Disney's dominance compared to other studios. We'll also explore key factors such as runtime, movie rating, and worldwide box office sales to gain deeper insights into the success of these films.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(scipen=999) # remove scientific notation from numbers
+
+library(ggplot2)
+library(plotly)
+library(lubridate) # modify dates and time
+library(scales) # formats numbers with commas
+library(dplyr) # functions like top_N
+library(ggpol) # parliament visual
+library(treemap) # treemap
+```
+
+```{r}
+# Color palette
+cvi_colours = list(palette = c("#23ce74", "#37bcf5", "#1fbfaf", "#ffae42", "#6b63fc", "#b02d38"))
+
+# Function to create color palette: https://www.jumpingrivers.com/blog/custom-colour-palettes-for-ggplot2/
+cvi_palettes = function(name, n, all_palettes = cvi_colours, type = c("discrete", "continuous")) {
+  palette = all_palettes[[name]]
+  if (missing(n)) {
+    n = length(palette)
+  }
+  type = match.arg(type)
+  out = switch(type,
+               continuous = grDevices::colorRampPalette(palette)(n),
+               discrete = palette[1:n]
+  )
+  structure(out, name = name, class = "palette")
+}
+```
+
+
+``` {r, echo=FALSE}
+Movies = read.csv("top1000.csv")
+
+# Data cleaning
+
+# Rename variables
+names(Movies)[names(Movies) == "Domestic.Sales..in..."] = "Domestic.Sales"
+names(Movies)[names(Movies) == "International.Sales..in..."] = "International.Sales"
+names(Movies)[names(Movies) == "World.Sales..in..."] = "World.Sales"
+names(Movies)[names(Movies) == "Movie.Runtime"] = "Runtime"
+names(Movies)[names(Movies) == "License"] = "Rating"
+
+# Adjust distributor names
+Movies$Distributor[Movies$Distributor == "Walt Disney Studios Motion Pictures"] = "Disney"
+Movies$Distributor[Movies$Distributor == "Paramount Pictures"] = "Paramount"
+Movies$Distributor[Movies$Distributor == "Sony Pictures Entertainment (SPE)"] = "Sony"
+Movies$Distributor[Movies$Distributor == "Twentieth Century Fox"] = "20th Century Fox"
+Movies$Distributor[Movies$Distributor == "Universal Pictures"] = "Universal"
+
+
+# Add categorical Runtime
+Movies$Runtime.Grouped = cut(Movies$Runtime, breaks = c(0, 90, 120, 150, 180, 500), 
+                     labels = c("< 90", "90–120", "120–150", "150–180", "> 180"))
+
+# Create Release.Month and Release.Year variables from Release.Date
+Movies$Release.Date = mdy(Movies$Release.Date)
+Movies$Release.Month = month(Movies$Release.Date)
+Movies$Release.Month = factor(Movies$Release.Month, levels = 1:12, 
+                      labels = c("January", "February", "March", "April", "May", 
+                                 "June", "July", "August", "September", 
+                                 "October", "November", "December"))
+Movies$Release.Year = year(Movies$Release.Date)
+
+Movies = Movies[Movies$Release.Year <= 2019, ]
+
+attach(Movies)
+```
+
+
+# Top 10 Movies by World Sales
+To understand Disney's dominance, let's start by looking at the top 10 highest-grossing movies of all time as of 2022, over half of which were released by Disney. Disney's box office success can be attributed to its iconic animation, as well as its wildly successful franchises like Pixar, Star Wars, and the Marvel Cinematic Universe.
+
+
+
+``` {r, echo=FALSE}
+Movies$Title[Movies$Title == "Star Wars: Episode VII - The Force Awakens"] = "Star Wars: The Force Awakens"
+
+top_n_movies = top_n(Movies, 10, World.Sales)
+
+p = ggplot(top_n_movies, aes(y = reorder(Title, World.Sales), x = World.Sales, fill = Distributor)) +
+  geom_col(aes(text = paste0("Title: ", Title,
+                               "<br>World Sales: $", comma(World.Sales),
+                               "<br>Distributor: ", Distributor))) + 
+  labs(title = "Top 10 Movies by World Sales",
+       x = "World Sales",
+       y = "") +
+  theme(axis.text.y = element_text(angle = 0, hjust = 1)) +
+  scale_x_continuous(labels = comma) + 
+  scale_fill_manual(values = cvi_palettes("palette", 10, type = "discrete"))
+
+ggplotly(p, tooltip = "text") %>%
+  layout(width = 900, height = 400)
+```
+  
+
+  
+# Box Office Sales Trends Over Time
+Next, let's explore the total annual annual box office sales by distributor, highlighting how Disney and other major distributors have performed over the years. Disney's dominance is immediately clear: a close second from 2010 to 2011, a close third in 2012, first place in 2013, slipped to third in 2014, and nearly reclaimed first in 2015. From 2016 to 2019, Disney led each year by over a billion dollars in annual sales, with an extraordinary lead of $8 billion over the second-place studio in 2019.
+
+
+``` {r, echo=FALSE}
+# Takes a movie dataframe, distributors list, and year, then returns the 
+# total worldwide box office gross of each distributor in that year
+annual_box_office = function(movie_df, distributors, year) {
+  annual_sales = NULL
+  for (i in 1:length(distributors)) {
+    distributor_movies = movie_df[movie_df$Distributor == distributors[i] & movie_df$Release.Year == year, ]
+    sales_sum = sum(distributor_movies$World.Sales, na.rm = TRUE)
+    annual_sales[i] = sales_sum
+  }
+  return(annual_sales)
+}
+
+# Calculate total sales per studio per year
+n = 90
+major_distributors = names(table(Movies$Distributor)[table(Movies$Distributor) > n])
+major_distributors_df = Movies[which(Movies$Distributor %in% major_distributors), ]
+distributors_total_annual_sales = data.frame(Distributor = character(), Year = integer(), Total.Sales = numeric())
+years = 2010:2020
+
+for (year in years) {
+  annual_sales = annual_box_office(major_distributors_df, major_distributors, year)
+  temp_df = data.frame(
+    Distributor = major_distributors,
+    Year = rep(year, length(major_distributors)),
+    Total.Sales = annual_sales
+  )
+  distributors_total_annual_sales = rbind(distributors_total_annual_sales, temp_df)
+}
+
+# Interactive graph of Total Annual Box Office Sales by Distributor
+p = ggplot(distributors_total_annual_sales[distributors_total_annual_sales$Year < 2020, ], aes(x = Year, y = Total.Sales, color = Distributor, shape = Distributor)) + 
+  geom_point(aes(text = paste0("Year: ", Year, 
+                              "<br>Total Sales: $", comma(Total.Sales),
+                              "<br>Distributor: ", Distributor))) +
+  geom_line() +
+  labs(title = "Total Annual Box Office Sales by Distributor", 
+       x = "Year", 
+       y = "Total Sales ($)") +
+  scale_x_continuous(breaks = c(2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019)) +
+  scale_y_continuous(labels = comma) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_color_manual(values = cvi_palettes("palette", 10, type = "discrete"))
+
+
+ggplotly(p, tooltip = "text") %>%
+  layout(width = 900, height = 400)
+```
+
+
+# Average World Sales by Distributor
+Next, we'll look at the average world sales by distributor to see which studios tend to generate the highest box office revenue per movie. Again, Disney is leading in this metric as well with an average of around $500 million in box office sales per movie.
+
+
+``` {r, echo=FALSE}
+p = ggplot(major_distributors_df, aes(x = Distributor, y = World.Sales, fill = Distributor)) + 
+  stat_summary(fun = "mean", geom = "col", na.rm = TRUE, 
+               aes(text = paste0("$", comma(..y..)))) + 
+  labs(title = "Average World Sales by Distributor", 
+       y = "Average World Sales") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = comma) +
+  scale_fill_manual(values = cvi_palettes("palette", 6, type = "discrete"))
+
+ggplotly(p, tooltip = "text") %>%
+  layout(width = 900, height = 400)
+``` 
+
+
+# Box Office Performance by Rating 
+We've established the overall success of Disney's movie studios, but what type of audience do Disney movies appeal to? By examining how the box office revenue is distributed across different movies ratings (G, PG, PG-13, R), we can compare the performance of family-friendly films against more mature-rated films across studios.
+
+
+```{r, echo=FALSE}
+# Treemap
+treemap_data <- aggregate(World.Sales ~ Rating + Distributor, data = major_distributors_df, FUN = sum)
+treemap(treemap_data, 
+        index = c("Rating", "Distributor"), 
+        vSize = "World.Sales",    # Use "World.Sales" as the size variable
+        vColor = "Distributor",   # Color by "Distributor"
+        palette = cvi_palettes("palette", 6, type = "discrete"), 
+        draw = TRUE, 
+        title = "Revenue Share by Rating and Distributor")
+```
+
+
+
+# Box Office Performance by Runtime 
+We can also break down box office performance by runtime, offering insights into the types of movies studios release and their financial success. By examining the differences in revenue across various runtime groups, we can investigate whether there is a correlation between movie length and box office success.
+
+```{r, echo=FALSE}
+p = ggplot(major_distributors_df, aes(x = Runtime.Grouped, y = World.Sales, fill = Distributor)) +
+  geom_bar(stat = "identity", position = "fill") +
+  labs(title = "Revenue Share by Runtime Group",
+       x = "Runtime Group (Minutes)",
+       y = "Revenue Share") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = percent) +
+  scale_fill_manual(values = cvi_palettes("palette", 6, type = "discrete"))
+
+ggplotly(p, tooltip = "none") %>%
+  layout(width = 900, height = 400)
+```
+
+
+# Number of Movies Released by Distributor
+In addition to sales, it's important to consider the number of movies released by each distributor, as shown in the visualization below. Disney releases a significant number of movies, second only to Warner Bros, yet they consistently lead in average box office performance, with many of their films turning into financial hits.
+
+
+``` {r, echo=FALSE}
+movie_counts = table(major_distributors_df$Distributor)
+movie_counts_df = as.data.frame(movie_counts)
+colnames(movie_counts_df) = c("Distributor", "Movie.Count")
+
+colors = cvi_palettes("palette", length(major_distributors), type = "discrete")
+
+ggplot(movie_counts_df) + 
+  geom_parliament(aes(seats = Movie.Count, fill = Distributor), color = "black") + 
+  scale_fill_manual(values = colors, labels = movie_counts_df$Distributor) +
+  coord_fixed() + 
+  theme_void() + 
+  labs(title = "Number of Movies Released by Distributor")
+``` 
+
+
+
+# Conclusion
+
+
+Disney's box office dominance is undeniable. The studio consistently generates high box office returns across a vast number of films, including many of the highest-grossing movies of all time, highlighting its global impact. Disney's broad appeal spans diverse audiences, solidifying its position as the undisputed leader in the industry.
+
