@@ -4,7 +4,7 @@ site: distill::distill_website
 ---
 
 # Introduction
-Movies have long been a major part of entertainment throughout the world, shaping trends and influencing audiences with their financial success, often reflecting their cultural impact. We will explore the top 1,000 highest-grossing Hollywood movies as of January 2020, sourced from IMDB and Rotten Tomatoes. Focusing on distributors with at least 90 movies in this list, we will examine their box office performance and analyze Disney's dominance compared to other studios. We will also explore key factors such as runtime, movie rating, and worldwide box office sales to gain deeper insights into the success of these films.
+Movies have long been a major part of entertainment throughout the world, shaping trends and influencing audiences, with their financial success often reflecting their cultural impact. We will explore the top 1,000 highest-grossing Hollywood movies as of January 2020, sourced from IMDB and Rotten Tomatoes. Focusing on distributors with at least 90 movies in this list, we will examine their box office performance and analyze Disney's dominance compared to other studios. We will also explore key factors such as runtime, movie rating, and worldwide box office sales to gain deeper insights into the success of these films.
 
 
 ```{r setup, include=FALSE}
@@ -166,7 +166,7 @@ ggplotly(p, tooltip = "text") %>%
 
 
 # Average World Sales by Distributor
-Next, we'll look at the average world sales by distributor to see which studios tend to generate the highest box office revenue per movie. Again, Disney is leading in this metric as well with an average of around $540 million in box office sales per movie.
+Next, we will look at the average world sales by distributor to see which studios tend to generate the highest box office revenue per movie. Again, Disney is leading in this metric as well with an average of around $540 million in box office sales per movie.
 
 
 ``` {r, echo=FALSE}
@@ -187,7 +187,7 @@ ggplotly(p, tooltip = "text") %>%
 
 
 # Box Office Performance by Rating 
-We've established the overall success of Disney's movie studios, but what type of audience do Disney movies appeal to? By examining how the box office revenue is distributed across different movies ratings (G, PG, PG-13, R), we can compare the performance of family-friendly films against more mature-rated films across studios.
+We have established the overall success of Disney's movie studios, but what type of audience do Disney movies appeal to? By examining how the box office revenue is distributed across different movies ratings (G, PG, PG-13, R), we can compare the performance of family-friendly films against more mature-rated films across studios.
 
 
 ```{r, echo=FALSE}
