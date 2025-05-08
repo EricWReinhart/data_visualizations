@@ -1,0 +1,17 @@
+"0","# Interactive graph of Total Annual Box Office Sales by Distributor
+p = ggplot(distributors_total_annual_sales[distributors_total_annual_sales$Year < 2020, ], aes(x = Year, y = Total.Sales, color = Distributor, shape = Distributor)) + 
+  geom_point(aes(text = paste0(""Year: "", Year, 
+                              ""<br>Total Sales: $"", comma(Total.Sales),
+                              ""<br>Distributor: "", Distributor))) +
+  geom_line() +
+  labs(title = ""Total Annual Box Office Sales by Distributor"", 
+       x = ""Year"", 
+       y = ""Total Sales ($)"") +
+  scale_x_continuous(breaks = c(2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019)) +
+  scale_y_continuous(labels = comma) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_color_manual(values = cvi_palettes(""palette"", 10, type = ""discrete"")) +
+  theme(plot.title = element_text(face = ""bold"")) +
+  theme(axis.text = element_text(face = ""bold""))
+"
+"2","Warning: [38;5;232mIgnoring unknown aesthetics: [32mtext[38;5;232m[39m"

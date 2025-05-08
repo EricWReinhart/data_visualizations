@@ -9,14 +9,12 @@ links:
     url: "https://www.linkedin.com/in/eric-w-reinhart/"
   - label: GitHub
     url: "https://github.com/EricWReinhart/"
-  - label: Email
-    url: "mailto:ewr005@bucknell.edu"
 output:
   postcards::jolla
 site: distill::distill_website
 ---
  
-Welcome to my virtual art gallery! Feel free to explore my Course Visualizations or my Movie Box Office Story!
+Welcome to my virtual art gallery! Feel free to explore my Movie Box Office Story or Course Visualizations!
 
 
 ```{r, out.width="70%", echo=FALSE}

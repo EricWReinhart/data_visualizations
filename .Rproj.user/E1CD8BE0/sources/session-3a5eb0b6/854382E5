@@ -3,7 +3,7 @@
     "path": "~/Desktop/data_project/data_visualizations/index.Rmd",
     "project_path": "index.Rmd",
     "type": "r_markdown",
-    "hash": "1366593334",
+    "hash": "3259496778",
     "contents": "",
     "dirty": false,
     "created": 1746470728906.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "21,19",
+        "cursorPosition": "21,3",
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1746654427,
+    "lastKnownWriteTime": 1746726592,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1746654427505,
+    "last_content_update": 1746726592645,
     "read_only": false,
     "read_only_alternatives": []
 }

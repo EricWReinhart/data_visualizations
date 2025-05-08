@@ -1,0 +1,5 @@
+"0","ggplotly(p, tooltip = ""text"") %>%
+  layout(width = 900, height = 400)
+"
+"2","Warning: Specifying width/height in layout() is now deprecated.
+Please specify in ggplotly() or plot_ly()"

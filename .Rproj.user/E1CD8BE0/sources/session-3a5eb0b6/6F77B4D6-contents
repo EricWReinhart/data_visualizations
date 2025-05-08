@@ -84,7 +84,7 @@ ggplot(plates, aes(x = plate.size, y = kcal.consumed, fill = plate.size)) +
 
 ## Correlation Matrix of Electricity Consumption Data
 
-This is a correlation matrix of data from US electricity producers in 1955. The variables are cost (total cost), output (total output), labor (wage rate), laborshare (cost share for labor), capital (capital price index), capitalshare (costshare for capital), fuel (fuel price), and fuelshare (cost share for fuel). Variables with a strong, positive correlation are more purple, and variables with a strong, negative correlation are more blue.
+This is a correlation matrix of data from US electricity producers in 1955. The variables are cost (total cost), output (total output), labor (wage rate), laborshare (cost share for labor), capital (capital price index), capitalshare (costshare for capital), fuel (fuel price), and fuelshare (cost share for fuel). Variables with a strong, positive correlation are more green, and variables with a strong, negative correlation are more orange.
 
 ```{r}
 library(ggplot2)
